@@ -4,11 +4,9 @@ apply plugin: 'java-library'
 
 dependencies {
 
-
-	//implementation project(':RS-Cache-Library')
 	// https://mvnrepository.com/artifact/com.displee/rs-cache-library
 	api 'com.displee:rs-cache-library:6.8.1'
-// https://mvnrepository.com/artifact/com.displee/disio
+	// https://mvnrepository.com/artifact/com.displee/disio
 	api 'com.displee:disio:2.2'
 
 	api group: 'org.apache.commons', name: 'commons-math3', version: '3.6.1'
