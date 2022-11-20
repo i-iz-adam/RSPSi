@@ -4707,7 +4707,7 @@ public class SceneGraph {
 		this.offsetY = chunk.offsetY;
 	}
 
-	public byte getSelectedUnderlay() {
+	public short getSelectedUnderlay() {
 		int plane = Options.currentHeight.get();
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < length; y++) {
@@ -4723,7 +4723,7 @@ public class SceneGraph {
 		return -1;
 	}
 
-	public byte getSelectedOverlay() {
+	public short getSelectedOverlay() {
 		int plane = Options.currentHeight.get();
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < length; y++) {

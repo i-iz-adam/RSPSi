@@ -268,7 +268,7 @@ public final class MapRegion {
 	private int length;
 	private int[] luminances;
 	public byte[][][] overlayOrientations;
-	public byte[][][] overlays;
+	public short[][][] overlays;
 	public byte[][][] manualTileHeight;
 	public byte[][][] overlayShapes;
 	private int[] saturations;
@@ -276,7 +276,7 @@ public final class MapRegion {
 	public byte[][][] tileFlags;
 	public int[][][] tileHeights;
 
-	public byte[][][] underlays;
+	public short[][][] underlays;
 
 	private int width;
 
@@ -289,8 +289,8 @@ public final class MapRegion {
 		this.length = length;
 		tileHeights = new int[4][width + 1][length + 1];
 		tileFlags = new byte[4][width][length];
-		underlays = new byte[4][width][length];
-		overlays = new byte[4][width][length];
+		underlays = new short[4][width][length];
+		overlays = new short[4][width][length];
 		manualTileHeight = new byte[4][width][length];
 		overlayShapes = new byte[4][width][length];
 		overlayOrientations = new byte[4][width][length];
@@ -376,14 +376,20 @@ public final class MapRegion {
 	public final void decodeConstructedMapData(byte[] data, int plane, int topLeftRegionX, int topLeftRegionY,
 			int tileZ, int minX, int minY, int rotation) {
 		Buffer buffer = new Buffer(data);
-		for (int z = 0; z < 4; z++) {
-			for (int x = 0; x < 64; x++) {
-				for (int y = 0; y < 64; y++) {
-					if (z == plane && x >= minX && x < minX + 8 && y >= minY && y < minY + 8) {
-						decodeMapData(buffer, topLeftRegionX + TileUtils.getXOffset(x & 7, y & 7, rotation),
-								topLeftRegionY + TileUtils.getYOffset(x & 7, y & 7, rotation), tileZ, 0, 0, rotation);
-					} else {
-						decodeMapData(buffer, -1, -1, 0, 0, 0, 0);
+		final int position = buffer.position;
+		try {
+
+		} catch (Exception ignored) {
+			buffer.position = position;
+			for (int z = 0; z < 4; z++) {
+				for (int x = 0; x < 64; x++) {
+					for (int y = 0; y < 64; y++) {
+						if (z == plane && x >= minX && x < minX + 8 && y >= minY && y < minY + 8) {
+							decodeOldMapData(buffer, topLeftRegionX + TileUtils.getXOffset(x & 7, y & 7, rotation),
+									topLeftRegionY + TileUtils.getYOffset(x & 7, y & 7, rotation), tileZ, 0, 0, rotation);
+						} else {
+							decodeOldMapData(buffer, -1, -1, 0, 0, 0, 0);
+						}
 					}
 				}
 			}
@@ -471,7 +477,7 @@ public final class MapRegion {
 		}
 	}
 
-	public final void decodeMapData(Buffer buffer, int x, int y, int z, int regionX, int regionY, int orientation) {// XXX
+	public final void decodeOldMapData(Buffer buffer, int x, int y, int z, int regionX, int regionY, int orientation) {// XXX
 		if (x >= 0 && x < width && y >= 0 && y < length) {
 			tileFlags[z][x][y] = 0;
 			do {
@@ -524,14 +530,80 @@ public final class MapRegion {
 		} while (true);
 	}
 
+
+	public final void decodeMapData(Buffer buffer, int x, int y, int z, int regionX, int regionY, int orientation) {// XXX
+		if (x >= 0 && x < width && y >= 0 && y < length) {
+			tileFlags[z][x][y] = 0;
+			do {
+				int type = buffer.readUShort();
+
+				if (type == 0) {
+					manualTileHeight[z][x][y] = 0;
+					if (z == 0) {
+						tileHeights[0][x][y] = -calculateHeight(0xe3b7b + x + regionX, 0x87cce + y + regionY) * 8;
+					} else {
+						tileHeights[z][x][y] = tileHeights[z - 1][x][y] - 240;
+					}
+
+					return;
+				} else if (type == 1) {
+					manualTileHeight[z][x][y] = 1;
+					int height = buffer.readUByte();
+					if (height == 1) {
+						height = 0;
+					}
+					if (z == 0) {
+						tileHeights[0][x][y] = -height * 8;
+					} else {
+						tileHeights[z][x][y] = tileHeights[z - 1][x][y] - height * 8;
+					}
+
+					return;
+				} else if (type <= 49) {
+					overlays[z][x][y] = (short) buffer.readShort();
+					overlayShapes[z][x][y] = (byte) ((type - 2) / 4);
+					overlayOrientations[z][x][y] = (byte) (type - 2 + orientation & 3);
+				} else if (type <= 81) {
+					tileFlags[z][x][y] = (byte) (type - 49);
+				} else {
+					underlays[z][x][y] = (short) (type - 81);
+				}
+			} while (true);
+		}
+
+		do {
+			int in = buffer.readUShort();
+			if (in == 0) {
+				break;
+			} else if (in == 1) {
+				buffer.readUByte();
+				return;
+			} else if (in <= 49) {
+				buffer.readUShort();
+			}
+		} while (true);
+	}
+
 	public final void unpackTiles(byte[] data, int dX, int dY, int regionX, int regionY) {
 
 		Buffer buffer = new Buffer(data);
-		for (int z = 0; z < 4; z++) {
-			for (int localX = 0; localX < 64; localX++) {
-				for (int localY = 0; localY < 64; localY++) {
-					decodeMapData(buffer, localX + dX, localY + dY, z, regionX, regionY, 0);
+		final int position = buffer.position;
 
+		try {
+			for (int z = 0; z < 4; z++) {
+				for (int localX = 0; localX < 64; localX++) {
+					for (int localY = 0; localY < 64; localY++) {
+						decodeMapData(buffer, localX + dX, localY + dY, z, regionX, regionY, 0);
+					}
+				}
+			}
+		} catch (Exception ignored) {
+			buffer.position = position;
+			for (int z = 0; z < 4; z++) {
+				for (int localX = 0; localX < 64; localX++) {
+					for (int localY = 0; localY < 64; localY++) {
+						decodeOldMapData(buffer, localX + dX, localY + dY, z, regionX, regionY, 0);
+					}
 				}
 			}
 		}
@@ -1114,24 +1186,24 @@ public final class MapRegion {
 
 	private void save_terrain_tile(int y, int x, int z, Buffer buffer) {
 		if (overlays[y][x][z] != 0) {
-			buffer.writeByte(overlayShapes[y][x][z] * 4 + (overlayOrientations[y][x][z] & 3) + 2);
-			buffer.writeByte(overlays[y][x][z]);
+			buffer.writeShort(overlayShapes[y][x][z] * 4 + (overlayOrientations[y][x][z] & 3) + 2);
+			buffer.writeShort(overlays[y][x][z]);
 		}
 		if (tileFlags[y][x][z] != 0) {
-			buffer.writeByte(tileFlags[y][x][z] + 49);
+			buffer.writeShort(tileFlags[y][x][z] + 49);
 		}
 		if (underlays[y][x][z] != 0) {
-			buffer.writeByte(underlays[y][x][z] + 81);
+			buffer.writeShort(underlays[y][x][z] + 81);
 		}
 		if (manualTileHeight[y][x][z] == 1 || y == 0) {
-			buffer.writeByte(1);
+			buffer.writeShort(1);
 			if (y == 0) {
 				buffer.writeByte(-tileHeights[y][x][z] / 8);
 			} else {
 				buffer.writeByte(-(tileHeights[y][x][z] - tileHeights[y - 1][x][z]) / 8);
 			}
 		} else {
-			buffer.writeByte(0);
+			buffer.writeShort(0);
 		}
 	}
 

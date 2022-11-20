@@ -39,9 +39,8 @@ subprojects {
 	apply plugin: 'io.franzbecker.gradle-lombok'
 
 
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
-
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 
     dependencies {
     
@@ -68,8 +67,8 @@ subprojects {
 
     apply plugin: 'org.openjfx.javafxplugin'
     javafx {
-        version = "17"
-        modules = [ 'javafx.base', 'javafx.fxml', 'javafx.graphics', 'javafx.controls', 'javafx.media', 'javafx.swing']
+        version = "11"
+        modules = ['javafx.base', 'javafx.fxml', 'javafx.graphics', 'javafx.controls', 'javafx.media', 'javafx.swing']
     }
 
 
