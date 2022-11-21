@@ -480,6 +480,12 @@ public final class MapRegion {
 	public final void decodeOldMapData(Buffer buffer, int x, int y, int z, int regionX, int regionY, int orientation) {// XXX
 		if (x >= 0 && x < width && y >= 0 && y < length) {
 			tileFlags[z][x][y] = 0;
+			manualTileHeight[z][x][y] = 0;
+			tileHeights[z][x][y] = 0;
+			overlays[z][x][y] = 0;
+			overlayShapes[z][x][y] = 0;
+			overlayOrientations[z][x][y] = 0;
+			underlays[z][x][y] = 0;
 			do {
 				int type = buffer.readUByte();
 
