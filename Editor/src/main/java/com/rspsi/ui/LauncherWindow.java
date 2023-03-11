@@ -44,6 +44,7 @@ public class LauncherWindow extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 
+		java.nio.file.Files.createDirectories(Paths.get(System.getProperty("user.home"), ".rspsi"));
 		File logFile = new File(Paths.get(System.getProperty("user.home"), ".rspsi").toFile(), "log.txt");
 
 			System.setOut(new PrintStream(logFile));
