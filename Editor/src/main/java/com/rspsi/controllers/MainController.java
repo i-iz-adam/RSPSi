@@ -154,6 +154,8 @@ public class MainController {
 
 	@FXML
 	private CheckMenuItem showFPSCheckItem;
+	@FXML
+	private CheckMenuItem showTileDataCheckItem;
 
 	@FXML
 	private MenuItem openTutorialBtn;
@@ -506,6 +508,7 @@ public class MainController {
 				Options.brushSize);
 
 		Options.showDebug.bindBidirectional(showFPSCheckItem.selectedProperty());
+		Options.showTileInformation.bindBidirectional(showTileDataCheckItem.selectedProperty());
 
 		Options.tileHeightLevel.bindBidirectional(heightLevelSlider.valueProperty());
 		// ChangeListenerUtil.addListener(() ->

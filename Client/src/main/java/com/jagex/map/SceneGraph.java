@@ -656,9 +656,9 @@ public class SceneGraph {
 	 */
 
 	public void addTile(int plane, int x, int y, int type, int orientation, int texture, int centreZ, int eastZ,
-	                    int northEastZ, int northZ, int centreUnderColour, int eastUnderColour, int neUnderColour,
-	                    int northUnderColour, int centreOverColour, int eastOverColour, int neOverColour, int northOverColour,
-	                    int underlayColour, int textureColour, int colour, int copy_texture, int copy_color, boolean tex, byte flags) {
+						int northEastZ, int northZ, int centreUnderColour, int eastUnderColour, int neUnderColour,
+						int northUnderColour, int centreOverColour, int eastOverColour, int neOverColour, int northOverColour,
+						int underlayColour, int textureColour, int colour, int copy_texture, int copy_color, boolean tex, byte flags, int underlayId, int overlayId) {
 		if (type == 434 && copy_texture != 24) {
 			SimpleTile tile = new SimpleTile(centreUnderColour, eastUnderColour, neUnderColour, northUnderColour, texture,
 					underlayColour, centreZ == eastZ && centreZ == northEastZ && centreZ == northZ, colour, tex);
@@ -671,6 +671,8 @@ public class SceneGraph {
 			tiles[plane][x][y].simple = tile;
 			tiles[plane][x][y].tileFlags = flags;
 			tiles[plane][x][y].hasUpdated = true;
+			tiles[plane][x][y].underlayId = underlayId;
+			tiles[plane][x][y].overlayId = overlayId;
 		} else if (type == 0) {
 			SimpleTile tile = new SimpleTile(centreUnderColour, eastUnderColour, neUnderColour, northUnderColour, -1,
 					underlayColour, false, textureColour, tex);
@@ -683,6 +685,8 @@ public class SceneGraph {
 			tiles[plane][x][y].simple = tile;
 			tiles[plane][x][y].tileFlags = flags;
 			tiles[plane][x][y].hasUpdated = true;
+			tiles[plane][x][y].underlayId = underlayId;
+			tiles[plane][x][y].overlayId = overlayId;
 		} else if (type == 1) {
 			SimpleTile tile = new SimpleTile(centreOverColour, eastOverColour, neOverColour, northOverColour, texture,
 					textureColour, centreZ == eastZ && centreZ == northEastZ && centreZ == northZ, colour, tex);
@@ -696,6 +700,8 @@ public class SceneGraph {
 			tiles[plane][x][y].simple = tile;
 			tiles[plane][x][y].tileFlags = flags;
 			tiles[plane][x][y].hasUpdated = true;
+			tiles[plane][x][y].underlayId = underlayId;
+			tiles[plane][x][y].overlayId = overlayId;
 		} else {
 			ShapedTile tile = new ShapedTile(y, centreOverColour, northUnderColour, northEastZ, texture,
 					neOverColour, orientation, centreUnderColour, underlayColour, neUnderColour, northZ, eastZ, centreZ,
@@ -709,6 +715,8 @@ public class SceneGraph {
 			tiles[plane][x][y].shape = tile;
 			tiles[plane][x][y].tileFlags = flags;
 			tiles[plane][x][y].hasUpdated = true;
+			tiles[plane][x][y].underlayId = underlayId;
+			tiles[plane][x][y].overlayId = overlayId;
 		}
 	}
 

@@ -41,6 +41,7 @@ public class Options {
 	public static BooleanProperty showMinimapFunctionModels = new SimpleBooleanProperty(false);
 
 	public static BooleanProperty showDebug = new SimpleBooleanProperty(false);
+	public static BooleanProperty showTileInformation = new SimpleBooleanProperty(false);
 
 	public static IntegerProperty currentHeight = new SimpleIntegerProperty(0);
 	public static IntegerProperty tileHeightLevel = new SimpleIntegerProperty(50);

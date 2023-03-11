@@ -36,6 +36,8 @@ public final class SceneTile extends Linkable {
 	public int anInt1328;
 	private int attributes;// 4 == TILE_EAST
 	public int collisionPlane;
+	public int underlayId;
+	public int overlayId;
 	public boolean hasUpdated;
 
 	@ToString.Exclude

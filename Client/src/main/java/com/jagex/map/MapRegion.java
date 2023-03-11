@@ -883,7 +883,7 @@ public final class MapRegion {
 												getOverlayShadow(overlay_hsl, northEastLight),
 												getOverlayShadow(overlay_hsl, northLight), rgb_bitset_randomized,
 												rgb_bitset_randomized, underlay_floor_map_color, underlay_floor_texture,
-												underlay_floor_map_color, false, flag);
+												underlay_floor_map_color, false, flag, underlay - 1, overlayFloorId - 1);
 									} else {
 										byte flag = tileFlags[z][centreX][centreY];
 										scene.addTile(z, centreX, centreY, 0, 0, -1, centreHeight, eastHeight,
@@ -891,7 +891,7 @@ public final class MapRegion {
 												light(hsl_bitset_unmodified, eastLight),
 												light(hsl_bitset_unmodified, northEastLight),
 												light(hsl_bitset_unmodified, northLight), 0, 0, 0, 0,
-												rgb_bitset_randomized, rgb_bitset_randomized, -1, 0, 0, true, flag);
+												rgb_bitset_randomized, rgb_bitset_randomized, -1, 0, 0, true, flag, underlay - 1, overlayFloorId - 1);
 									}
 
 								} else {
@@ -1038,7 +1038,7 @@ public final class MapRegion {
 												getOverlayShadow(overlayHslColour, northEastLight),
 												getOverlayShadow(overlayHslColour, northLight), rgb_bitset_randomized,
 												overlayRgbColour, overlayTextureColour, underlay_floor_texture,
-												underlay_floor_map_color, false, flag);
+												underlay_floor_map_color, false, flag, underlay - 1, overlayFloorId - 1);
 									} else {
 										byte flag = tileFlags[z][centreX][centreY];
 										scene.addTile(z, centreX, centreY, tileType, orientation, overlayTextureId,
@@ -1051,7 +1051,7 @@ public final class MapRegion {
 												ColourUtils.checkedLight(overlayHslColour, eastLight),
 												ColourUtils.checkedLight(overlayHslColour, northEastLight),
 												ColourUtils.checkedLight(overlayHslColour, northLight),
-												rgb_bitset_randomized, overlayRgbColour, -1, 0, 0, true, flag);
+												rgb_bitset_randomized, overlayRgbColour, -1, 0, 0, true, flag, underlay - 1, overlayFloorId - 1);
 									}
 
 								}
@@ -1852,7 +1852,7 @@ public final class MapRegion {
 													getOverlayShadow(overlay_hsl, northEastLight),
 													getOverlayShadow(overlay_hsl, northLight), rgb_bitset_randomized,
 													rgb_bitset_randomized, underlay_floor_map_color,
-													underlay_floor_texture, underlay_floor_map_color, false, flag);
+													underlay_floor_texture, underlay_floor_map_color, false, flag, underlay - 1, overlayFloorId - 1);
 										} else {
 											scene.addTile(z, centreX, centreY, 0, 0, -1, centreHeight, eastHeight,
 													northEastHeight, northHeight,
@@ -1860,7 +1860,7 @@ public final class MapRegion {
 													light(hsl_bitset_unmodified, eastLight),
 													light(hsl_bitset_unmodified, northEastLight),
 													light(hsl_bitset_unmodified, northLight), 0, 0, 0, 0,
-													rgb_bitset_randomized, rgb_bitset_randomized, -1, 0, 0, true, flag);
+													rgb_bitset_randomized, rgb_bitset_randomized, -1, 0, 0, true, flag, underlay - 1, overlayFloorId - 1);
 										}
 
 									} else {
@@ -1978,7 +1978,7 @@ public final class MapRegion {
 													getOverlayShadow(overlayHslColour, northEastLight),
 													getOverlayShadow(overlayHslColour, northLight),
 													rgb_bitset_randomized, overlayRgbColour, overlayTextureColour,
-													underlay_floor_texture, underlay_floor_map_color, false, flag);
+													underlay_floor_texture, underlay_floor_map_color, false, flag, underlay - 1, overlayFloorId - 1);
 										} else {
 											byte flag = tileFlags[z][centreX][centreY];
 											scene.addTile(z, centreX, centreY, tileType, orientation, overlayTextureId,
@@ -1991,7 +1991,7 @@ public final class MapRegion {
 													getOverlayShadow(overlayHslColour, eastLight),
 													getOverlayShadow(overlayHslColour, northEastLight),
 													getOverlayShadow(overlayHslColour, northLight),
-													rgb_bitset_randomized, overlayRgbColour, -1, 0, 0, true, flag);
+													rgb_bitset_randomized, overlayRgbColour, -1, 0, 0, true, flag, underlay - 1, overlayFloorId - 1);
 										}
 
 									}
@@ -2258,7 +2258,7 @@ public final class MapRegion {
 													getOverlayShadow(overlay_hsl, northEastLight),
 													getOverlayShadow(overlay_hsl, northLight), rgb_bitset_randomized,
 													rgb_bitset_randomized, underlay_floor_map_color,
-													underlay_floor_texture, underlay_floor_map_color, false, flag);
+													underlay_floor_texture, underlay_floor_map_color, false, flag, underlay - 1, overlayFloorId - 1);
 										} else {
 											scene.addTile(z, centreX, centreY, 0, 0, -1, centreHeight, eastHeight,
 													northEastHeight, northHeight,
@@ -2266,7 +2266,7 @@ public final class MapRegion {
 													light(hsl_bitset_unmodified, eastLight),
 													light(hsl_bitset_unmodified, northEastLight),
 													light(hsl_bitset_unmodified, northLight), 0, 0, 0, 0,
-													rgb_bitset_randomized, rgb_bitset_randomized, -1, 0, 0, true, flag);
+													rgb_bitset_randomized, rgb_bitset_randomized, -1, 0, 0, true, flag, underlay - 1, overlayFloorId - 1);
 										}
 
 									} else {
@@ -2373,7 +2373,7 @@ public final class MapRegion {
 													getOverlayShadow(overlayHslColour, northEastLight),
 													getOverlayShadow(overlayHslColour, northLight),
 													rgb_bitset_randomized, overlayRgbColour, overlayTextureColour,
-													underlay_floor_texture, underlay_floor_map_color, false, flag);
+													underlay_floor_texture, underlay_floor_map_color, false, flag, underlay - 1, overlayFloorId - 1);
 										} else {
 											byte flag = tileFlags[z][centreX][centreY];
 											scene.addTile(z, centreX, centreY, tileType, orientation, overlayTextureId,
@@ -2386,7 +2386,7 @@ public final class MapRegion {
 													getOverlayShadow(overlayHslColour, eastLight),
 													getOverlayShadow(overlayHslColour, northEastLight),
 													getOverlayShadow(overlayHslColour, northLight),
-													rgb_bitset_randomized, overlayRgbColour, -1, 0, 0, true, flag);
+													rgb_bitset_randomized, overlayRgbColour, -1, 0, 0, true, flag, underlay - 1, overlayFloorId - 1);
 										}
 
 									}

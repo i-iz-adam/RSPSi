@@ -990,7 +990,6 @@ public final class Client implements Runnable {
 	}
 
 	public final void drawDebugOverlay() {
-
 		if (Options.showDebug.get()) {
 			int c = (int) gameCanvas.getWidth() - 20;
 			int k = 40;
@@ -998,7 +997,7 @@ public final class Client implements Runnable {
 			if (fps < 15) {
 				i1 = 0xff0000;
 			}
-			if(this.getCurrentChunk() != null) {
+			if (this.getCurrentChunk() != null) {
 				Chunk chunk = this.getCurrentChunk();
 				k += TextRenderUtils.renderLeft(gameImageBuffer, "WorldX: " + (chunk.regionX * 64) + " WorldY: " + (chunk.regionY * 64), c, k, i1);
 			}
@@ -1009,7 +1008,7 @@ public final class Client implements Runnable {
 			i1 = 0xffff00;
 			k += TextRenderUtils.renderLeft(gameImageBuffer, "Mem: " + memory / 1024 + "MB", c, k, 0xffff00);
 
-			k += TextRenderUtils.renderLeft(gameImageBuffer, "Chunk map files:  "  + getCurrentChunk().tileMapName + " " + getCurrentChunk().objectMapName + " ", c, k, 0xffff00);
+			k += TextRenderUtils.renderLeft(gameImageBuffer, "Chunk map files:  " + getCurrentChunk().tileMapName + " " + getCurrentChunk().objectMapName + " ", c, k, 0xffff00);
 
 			k += TextRenderUtils.renderLeft(gameImageBuffer, "Mouse: " + mouseEventX + "," + mouseEventY + "", c, k, 0xffff00);
 
@@ -1026,12 +1025,26 @@ public final class Client implements Runnable {
 
 			k += TextRenderUtils.renderLeft(gameImageBuffer, "Hover UID: " + hoveredUID + "", c, k, 0xffff00);
 
-			if(sceneGraph.tiles[Options.currentHeight.get()][sceneGraph.hoveredTileX][sceneGraph.hoveredTileY] != null) {
-				SceneTile tile = sceneGraph.tiles[Options.currentHeight.get()][sceneGraph.hoveredTileX][sceneGraph.hoveredTileY];
-				k += TextRenderUtils.renderLeft(gameImageBuffer, "Simple Data: " + (tile.simple != null ? tile.simple.toString() : "") , c, k, 0xffff00);
-
-				k += TextRenderUtils.renderLeft(gameImageBuffer, "Shaped Data: "+ (tile.shape != null ? tile.shape.toString() : "null"), c, k, 0xffff00);
-
+			int currentHeight = Options.currentHeight.get();
+			int hoveredTileX = SceneGraph.hoveredTileX;
+			int hoveredTileY = SceneGraph.hoveredTileY;
+			SceneTile[][][] tiles = sceneGraph.tiles;
+			if (currentHeight >= 0 && currentHeight < tiles.length) {
+				SceneTile[][] tilesOnHeight = tiles[currentHeight];
+				if (hoveredTileX >= 0 && hoveredTileX < tilesOnHeight.length) {
+					SceneTile[] tilesOnXCoord = tilesOnHeight[hoveredTileX];
+					if (hoveredTileY >= 0 && hoveredTileY < tilesOnXCoord.length) {
+						SceneTile tile = tilesOnXCoord[hoveredTileY];
+						if (tile != null) {
+							if (Options.showTileInformation.get()) {
+								k += TextRenderUtils.renderLeft(gameImageBuffer, "Simple Data: " + (tile.simple != null ? tile.simple.toString() : ""), c, k, 0xffff00);
+								k += TextRenderUtils.renderLeft(gameImageBuffer, "Shaped Data: " + (tile.shape != null ? tile.shape.toString() : "null"), c, k, 0xffff00);
+							}
+							k += TextRenderUtils.renderLeft(gameImageBuffer, "Underlay id: " + tile.underlayId + "", c, k, 0xFFFF00);
+							k += TextRenderUtils.renderLeft(gameImageBuffer, "Overlay id: " + tile.overlayId + "", c, k, 0xFFFF00);
+						}
+					}
+				}
 			}
 
 
@@ -1051,7 +1064,7 @@ public final class Client implements Runnable {
 
 				k += TextRenderUtils.renderLeft(gameImageBuffer, "Type: " + type + " | Rot: " + orientation, c, k, 0xffff00);
 
-				k += TextRenderUtils.renderLeft(gameImageBuffer, "Pos: " + x + ", " + y, c, k,  0xffff00);
+				k += TextRenderUtils.renderLeft(gameImageBuffer, "Pos: " + x + ", " + y, c, k, 0xffff00);
 			}
 
 		}
