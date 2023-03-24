@@ -678,7 +678,7 @@ public final class MapRegion {
 				for (int y = 0; y < length; y++) {
 					int maxX = centreX + 5;
 					if (maxX >= 0 && maxX < width) {
-						int id = underlays[z][maxX][y] & 0xff;
+						int id = underlays[z][maxX][y] & 0xFFFF;
 
 						if (id > 0) {
 							Floor floor = FloorDefinitionLoader.getUnderlay(id - 1);
@@ -694,7 +694,7 @@ public final class MapRegion {
 
 					int minX = centreX - 5;
 					if (minX >= 0 && minX < width) {
-						int id = underlays[z][minX][y] & 0xff;
+						int id = underlays[z][minX][y] & 0xFFFF;
 
 						if (id > 0) {
 							Floor floor = FloorDefinitionLoader.getUnderlay(id - 1);
@@ -745,8 +745,8 @@ public final class MapRegion {
 								maximumPlane = z;
 							}
 
-							int underlay = underlays[z][centreX][centreY] & 0xff;
-							int overlayFloorId = overlays[z][centreX][centreY] & 0xff;
+							int underlay = underlays[z][centreX][centreY] & 0xFFFF;
+							int overlayFloorId = overlays[z][centreX][centreY] & 0xFFFF;
 
 							if (underlay > 0 || overlayFloorId > 0) {
 								int centreHeight = tileHeights[z][centreX][centreY];
@@ -1176,10 +1176,10 @@ public final class MapRegion {
 
 	public byte[] save_terrain_block(Chunk chunk) {
 		Buffer buffer = new Buffer(new byte[131072]);
-		for (int tile_y = 0; tile_y < 4; tile_y++) {
-			for (int tile_x = chunk.offsetX; tile_x < chunk.offsetX + 64; tile_x++) {
-				for (int tile_z = chunk.offsetY; tile_z < chunk.offsetY + 64; tile_z++) {
-					save_terrain_tile(tile_y, tile_x, tile_z, buffer);
+		for (int level = 0; level < 4; level++) {
+			for (int x = chunk.offsetX; x < chunk.offsetX + 64; x++) {
+				for (int y = chunk.offsetY; y < chunk.offsetY + 64; y++) {
+					save_terrain_tile(level, x, y, buffer);
 				}
 
 			}
@@ -1190,23 +1190,23 @@ public final class MapRegion {
 		return data;
 	}
 
-	private void save_terrain_tile(int y, int x, int z, Buffer buffer) {
-		if (overlays[y][x][z] != 0) {
-			buffer.writeShort(overlayShapes[y][x][z] * 4 + (overlayOrientations[y][x][z] & 3) + 2);
-			buffer.writeShort(overlays[y][x][z]);
+	private void save_terrain_tile(int level, int x, int y, Buffer buffer) {
+		if (overlays[level][x][y] != 0) {
+			buffer.writeShort(overlayShapes[level][x][y] * 4 + (overlayOrientations[level][x][y] & 3) + 2);
+			buffer.writeShort(overlays[level][x][y] & 0xFFFF);
 		}
-		if (tileFlags[y][x][z] != 0) {
-			buffer.writeShort(tileFlags[y][x][z] + 49);
+		if (tileFlags[level][x][y] != 0) {
+			buffer.writeShort(tileFlags[level][x][y] + 49);
 		}
-		if (underlays[y][x][z] != 0) {
-			buffer.writeShort(underlays[y][x][z] + 81);
+		if (underlays[level][x][y] != 0) {
+			buffer.writeShort((underlays[level][x][y] & 0xFFFF) + 81);
 		}
-		if (manualTileHeight[y][x][z] == 1 || y == 0) {
+		if (manualTileHeight[level][x][y] == 1 || level == 0) {
 			buffer.writeShort(1);
-			if (y == 0) {
-				buffer.writeByte(-tileHeights[y][x][z] / 8);
+			if (level == 0) {
+				buffer.writeByte(-tileHeights[level][x][y] / 8);
 			} else {
-				buffer.writeByte(-(tileHeights[y][x][z] - tileHeights[y - 1][x][z]) / 8);
+				buffer.writeByte(-(tileHeights[level][x][y] - tileHeights[level - 1][x][y]) / 8);
 			}
 		} else {
 			buffer.writeShort(0);
@@ -1608,7 +1608,7 @@ public final class MapRegion {
 					for (int y = 0; y < length; y++) {
 						int maxX = centreX + 5;
 						if (maxX >= 0 && maxX < width) {
-							int id = underlays[z][maxX][y] & 0xff;
+							int id = underlays[z][maxX][y] & 0xFFFF;
 
 							if (id > 0) {
 								Floor floor = FloorDefinitionLoader.getUnderlay(id - 1);
@@ -1624,7 +1624,7 @@ public final class MapRegion {
 
 						int minX = centreX - 5;
 						if (minX >= 0 && minX < width) {
-							int id = underlays[z][minX][y] & 0xff;
+							int id = underlays[z][minX][y] & 0xFFFF;
 
 							if (id > 0) {
 								Floor floor = FloorDefinitionLoader.getUnderlay(id - 1);
@@ -1676,8 +1676,8 @@ public final class MapRegion {
 									maximumPlane = z;
 								}
 
-								int underlay = underlays[z][centreX][centreY] & 0xff;
-								int overlayFloorId = overlays[z][centreX][centreY] & 0xff;
+								int underlay = underlays[z][centreX][centreY] & 0xFFFF;
+								int overlayFloorId = overlays[z][centreX][centreY] & 0xFFFF;
 
 								/*
 								 * boolean hiddenHL = showHiddenTiles && z == Options.currentHeight.get(); if
@@ -2060,7 +2060,7 @@ public final class MapRegion {
 					for (int y = 0; y < length; y++) {
 						int maxX = centreX + 5;
 						if (maxX >= 0 && maxX < width) {
-							int id = underlays[z][maxX][y] & 0xff;
+							int id = underlays[z][maxX][y] & 0xFFFF;
 
 							if (id > 0) {
 								Floor floor = FloorDefinitionLoader.getUnderlay(id - 1);
@@ -2074,7 +2074,7 @@ public final class MapRegion {
 
 						int minX = centreX - 5;
 						if (minX >= 0 && minX < width) {
-							int id = underlays[z][minX][y] & 0xff;
+							int id = underlays[z][minX][y] & 0xFFFF;
 
 							if (id > 0) {
 								Floor floor = FloorDefinitionLoader.getUnderlay(id - 1);
@@ -2118,8 +2118,8 @@ public final class MapRegion {
 									maximumPlane = z;
 								}
 
-								int underlay = underlays[z][centreX][centreY] & 0xff;
-								int overlayFloorId = overlays[z][centreX][centreY] & 0xff;
+								int underlay = underlays[z][centreX][centreY] & 0xFFFF;
+								int overlayFloorId = overlays[z][centreX][centreY] & 0xFFFF;
 
 								if (underlay > 0 || overlayFloorId > 0) {
 									int centreHeight = tileHeights[z][centreX][centreY];
