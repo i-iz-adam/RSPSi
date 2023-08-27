@@ -512,13 +512,13 @@ public final class MapRegion {
 
 					return;
 				} else if (type <= 49) {
-					overlays[z][x][y] = buffer.readByte();
+					overlays[z][x][y] = (short) (buffer.readByte() & 0xFF);
 					overlayShapes[z][x][y] = (byte) ((type - 2) / 4);
 					overlayOrientations[z][x][y] = (byte) (type - 2 + orientation & 3);
 				} else if (type <= 81) {
 					tileFlags[z][x][y] = (byte) (type - 49);
 				} else {
-					underlays[z][x][y] = (byte) (type - 81);
+					underlays[z][x][y] = (short) (type - 81);
 				}
 			} while (true);
 		}
