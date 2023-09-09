@@ -1850,11 +1850,36 @@ public class SceneGraph {
 
 							if (data.getGameObjectIds() != null) {
 								for (int i = 0; i < data.getGameObjectIds().length; i++) {
-
-									this.addObject(xPos, yPos, zPos, data.getGameObjectIds()[i],
+									ObjectDefinition def = ObjectDefinitionLoader.lookup(data.getGameObjectIds()[i]);
+									int width = def.getWidth();
+									int length = def.getLength();
+									if ((data.getGameObjectConfigs()[i] & 0x1) == 1) {
+										width = def.getLength();
+										length = def.getWidth();
+									}
+									int offX = 0;
+									int offY = 0;
+									switch (Options.rotation.get()) {
+										case 1:
+											offX = 1 - length;
+											break;
+										case 2:
+											offX = 1 - width;
+											offY = 1 - length;
+											break;
+										case 3:
+											offY = 1 - width;
+											break;
+									}
+									this.addObject(
+											xPos + offX,
+											yPos + offY,
+											zPos,
+											data.getGameObjectIds()[i],
 											data.getGameObjectConfigs()[i] >> 2,
-											((data.getGameObjectConfigs()[i] & 0xff) - (Options.rotation.get())) & 3, false);
-
+											(data.getGameObjectConfigs()[i] & 0xff) - Options.rotation.get() & 3,
+											false
+									);
 								}
 							}
 							if (data.getGroundDecoId() != -1) {
@@ -1909,18 +1934,46 @@ public class SceneGraph {
 							if (data.getGameObjectIds() != null) {
 								for (int i = 0; i < data.getGameObjectIds().length; i++) {
 									ObjectDefinition def = ObjectDefinitionLoader.lookup(data.getGameObjectIds()[i]);
+									int width = def.getWidth();
+									int length = def.getLength();
+									if ((data.getGameObjectConfigs()[i] & 0x1) == 1) {
+										width = def.getLength();
+										length = def.getWidth();
+									}
+									int offX = 0;
+									int offY = 0;
+									switch (Options.rotation.get()) {
+										case 1:
+											offX = 1 - length;
+											break;
+										case 2:
+											offX = 1 - width;
+											offY = 1 - length;
+											break;
+										case 3:
+											offY = 1 - width;
+											break;
+									}
 									if (def.getWidth() > 1 || def.getLength() > 1) {
-
-										this.addObject(rotatedXPos, rotatedYPos, zPos, data.getGameObjectIds()[i],
+										this.addObject(
+												rotatedXPos + offX,
+												rotatedYPos + offY,
+												zPos,
+												data.getGameObjectIds()[i],
 												data.getGameObjectConfigs()[i] >> 2,
-												(data.getGameObjectConfigs()[i] & 0xff) - Options.rotation.get() & 3, true);
-
+												(data.getGameObjectConfigs()[i] & 0xff) - Options.rotation.get() & 3,
+												true
+										);
 									} else {
-
-										this.addObject(rotatedXPos, rotatedYPos, zPos, data.getGameObjectIds()[i],
+										this.addObject(
+												rotatedXPos,
+												rotatedYPos,
+												zPos,
+												data.getGameObjectIds()[i],
 												data.getGameObjectConfigs()[i] >> 2,
-												(data.getGameObjectConfigs()[i] & 0xff) - Options.rotation.get() & 3, true);
-
+												(data.getGameObjectConfigs()[i] & 0xff) - Options.rotation.get() & 3,
+												true
+										);
 									}
 								}
 							}
