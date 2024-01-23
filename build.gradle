@@ -23,9 +23,8 @@ allprojects {
         mavenCentral()
         mavenLocal()
         maven { url "https://repo.maven.apache.org/maven2" }
-        maven { url "https://repo.adobe.com/nexus/content/repositories/public/"%7D
+        maven { url "https://repo.adobe.com/nexus/content/repositories/public/" }
     }
-
 }
 
 subprojects {
@@ -39,9 +38,9 @@ subprojects {
 
     dependencies {
 
-    // https://mvnrepository.com/artifact/com.google.code.gson/gson
+        // https://mvnrepository.com/artifact/com.google.code.gson/gson
         api group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.10'
-           // https://mvnrepository.com/artifact/org.checkerframework/checker-qual
+        // https://mvnrepository.com/artifact/org.checkerframework/checker-qual
         api group: 'org.checkerframework', name: 'checker-qual', version: '3.21.1'
 
         api group: 'com.google.guava', name: 'guava', version: '31.0.1-jre'
