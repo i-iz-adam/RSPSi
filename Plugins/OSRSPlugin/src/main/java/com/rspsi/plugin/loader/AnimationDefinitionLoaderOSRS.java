@@ -118,14 +118,14 @@ public class AnimationDefinitionLoaderOSRS extends AnimationDefinitionLoader {
 				int len = buffer.readUByte();
 
 				for (int i = 0; i < len; i++) {
-					buffer.skip(3);
+					buffer.skip(5);
 				}
 			
 			} else if (opcode == 14) {
 				buffer.skip(4);
 			} else if (opcode == 15) {
 				int count = buffer.readUShort();
-				buffer.skip(count * 5);
+				buffer.skip(count * 7);
 			} else if (opcode == 16) {
 				buffer.skip(4);
 			} else if (opcode == 17) {

@@ -219,9 +219,9 @@ public class ObjectDefinitionLoaderOSRS extends ObjectDefinitionLoader {
 				definition.setVarp(varp);
 			} else if (opcode == 78) {//TODO Figure out what these do in OSRS
 				//First short = ambient sound
-				buffer.skip(3);
+				buffer.skip(4);
 			} else if (opcode == 79) {
-				buffer.skip(5);
+				buffer.skip(6);
 				int count = buffer.readUByte();
 				buffer.skip(2 * count);
 			} else if (opcode == 81) {
@@ -230,6 +230,8 @@ public class ObjectDefinitionLoaderOSRS extends ObjectDefinitionLoader {
 				definition.setAreaId(buffer.readUShort());//AreaType
 			} else if (opcode == 89) {
 				definition.setRandomizeAnimStart(true);
+			} else if (opcode == 90) {
+				// defer anim start
 			} else if (opcode == 249) {
 				int var1 = buffer.readUByte();
 				for (int var2 = 0; var2 < var1; var2++) {
