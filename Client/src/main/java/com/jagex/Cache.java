@@ -50,37 +50,14 @@ public class Cache {
     public Cache(Path path) {
         log.info("Loading cache at {}", path);
         indexedFileSystem = new CacheLibrary(path.toFile().toString(), false, null);
-        if (indexedFileSystem.is317()) {
-            modelArchive = indexedFileSystem.index(1);
-            mapArchive = indexedFileSystem.index(4);
-            configArchive = indexedFileSystem.index(0);
-            skinArchive = indexedFileSystem.index(2);
-            skeletonArchive = null;//317 loads inside skins
-            log.info("Loaded cache in 317 format!");
-        } else if (indexedFileSystem.isOSRS()) {
-            modelArchive = indexedFileSystem.index(7);
-            mapArchive = indexedFileSystem.index(5);
-            configArchive = indexedFileSystem.index(2);
-            skeletonArchive = indexedFileSystem.index(0);
-            skinArchive = indexedFileSystem.index(1);
-            spriteIndex = indexedFileSystem.index(8);
-            textureIndex = indexedFileSystem.index(9);
-            log.info("Loaded cache in OSRS format!");
-        } else if (indexedFileSystem.isRS3()) {
-            modelArchive = indexedFileSystem.index(7);
-            mapArchive = indexedFileSystem.index(5);
-            configArchive = indexedFileSystem.index(2);
-            skeletonArchive = indexedFileSystem.index(0);
-            skinArchive = indexedFileSystem.index(1);
-            spriteIndex = indexedFileSystem.index(8);
-            textureIndex = indexedFileSystem.index(9);
-            spotAnimIndex = indexedFileSystem.index(21);
-            varbitIndex = indexedFileSystem.index(22);
-            locIndex = indexedFileSystem.index(16);
-            log.info("Loaded cache in RS3 format!");
-        } else if (indexedFileSystem.isRS3()) {
-            throw new UnsupportedOperationException("Cache format not supported!");
-        }
+        modelArchive = indexedFileSystem.index(7);
+        mapArchive = indexedFileSystem.index(5);
+        configArchive = indexedFileSystem.index(2);
+        skeletonArchive = indexedFileSystem.index(0);
+        skinArchive = indexedFileSystem.index(1);
+        spriteIndex = indexedFileSystem.index(8);
+        textureIndex = indexedFileSystem.index(9);
+        log.info("Loaded cache in OSRS format!");
         resourceProvider = new ResourceProvider(this);
         Thread t = new Thread(resourceProvider);
         t.start();
@@ -95,8 +72,6 @@ public class Cache {
     public Sprite getSprite(int id) {
         if (spriteCache.contains(id))
             return spriteCache.get(id);
-        if (!indexedFileSystem.isOSRS())
-            throw new RuntimeException("Cannot grab sprite by ID on 317!");
         Sprite sprite = Sprite.decode(ByteBuffer.wrap(spriteIndex.archive(id).file(0).getData()));
         spriteCache.put(id, sprite);
         System.out.println("GETSPRITE " + id);
