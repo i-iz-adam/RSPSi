@@ -45,97 +45,113 @@ public class AnimationDefinitionLoaderOSRS extends AnimationDefinitionLoader {
 			animations[id] = decode(buffer);
 		}
 	}
-	
+
 	protected Animation decode(Buffer buffer) {
 		Animation animation = new Animation();
-		do {
+		while (true) {
 			int opcode = buffer.readUByte();
-			if (opcode == 0) {
+			if (opcode == 0)
 				break;
-			}
 			if (opcode == 1) {
 				int frameCount = buffer.readUShort();
 				int[] primaryFrames = new int[frameCount];
 				int[] secondaryFrames = new int[frameCount];
 				int[] durations = new int[frameCount];
-
-				for (int frame = 0; frame < frameCount; frame++) {
+				int frame;
+				for (frame = 0; frame < frameCount; frame++)
 					durations[frame] = buffer.readUShort();
-				}
-
-				for (int frame = 0; frame < frameCount; frame++) {
+				for (frame = 0; frame < frameCount; frame++) {
 					primaryFrames[frame] = buffer.readUShort();
 					secondaryFrames[frame] = -1;
 				}
-				
-
-				for (int frame = 0; frame < frameCount; frame++) {
-					primaryFrames[frame] += buffer.readUShort() << 16;
-				}
-
+				for (frame = 0; frame < frameCount; frame++)
+					primaryFrames[frame] = primaryFrames[frame] + (buffer.readUShort() << 16);
 				animation.setFrameCount(frameCount);
 				animation.setPrimaryFrames(primaryFrames);
 				animation.setSecondaryFrames(secondaryFrames);
 				animation.setDurations(durations);
-			} else if (opcode == 2) {
+				continue;
+			}
+			if (opcode == 2) {
 				animation.setLoopOffset(buffer.readUShort());
-			} else if (opcode == 3) {
+				continue;
+			}
+			if (opcode == 3) {
 				int count = buffer.readUByte();
 				int[] interleaveOrder = new int[count + 1];
-				for (int index = 0; index < count; index++) {
+				for (int index = 0; index < count; index++)
 					interleaveOrder[index] = buffer.readUByte();
-				}
-
 				interleaveOrder[count] = 9999999;
 				animation.setInterleaveOrder(interleaveOrder);
-			} else if (opcode == 4) {
+				continue;
+			}
+			if (opcode == 4) {
 				animation.setStretches(true);
-			} else if (opcode == 5) {
+				continue;
+			}
+			if (opcode == 5) {
 				animation.setPriority(buffer.readUByte());
-			} else if (opcode == 6) {
+				continue;
+			}
+			if (opcode == 6) {
 				animation.setPlayerOffhand(buffer.readUShort());
-			} else if (opcode == 7) {
+				continue;
+			}
+			if (opcode == 7) {
 				animation.setPlayerMainhand(buffer.readUShort());
-			} else if (opcode == 8) {
+				continue;
+			}
+			if (opcode == 8) {
 				animation.setMaximumLoops(buffer.readUByte());
-			} else if (opcode == 9) {
+				continue;
+			}
+			if (opcode == 9) {
 				animation.setAnimatingPrecedence(buffer.readUByte());
-			} else if (opcode == 10) {
+				continue;
+			}
+			if (opcode == 10) {
 				animation.setWalkingPrecedence(buffer.readUByte());
-			} else if (opcode == 11) {
+				continue;
+			}
+			if (opcode == 11) {
 				animation.setReplayMode(buffer.readUByte());
-			} else if (opcode == 12) {
+				continue;
+			}
+			if (opcode == 12) {
 				int len = buffer.readUByte();
-
-				for (int i = 0; i < len; i++) {
+				int i;
+				for (i = 0; i < len; i++)
 					buffer.readUShort();
-				}
-
-				for (int i = 0; i < len; i++) {
+				for (i = 0; i < len; i++)
 					buffer.readUShort();
-				}
-			} else if (opcode == 13) {
+				continue;
+			}
+			if (opcode == 13) {
 				int len = buffer.readUByte();
-
-				for (int i = 0; i < len; i++) {
-					buffer.skip(3);
-				}
-			
-			} else if (opcode == 14) {
+				for (int i = 0; i < len; i++)
+					buffer.skip(5);
+				continue;
+			}
+			if (opcode == 14) {
 				buffer.skip(4);
-			} else if (opcode == 15) {
+				continue;
+			}
+			if (opcode == 15) {
 				int count = buffer.readUShort();
-				buffer.skip(count * 5);
-			} else if (opcode == 16) {
+				buffer.skip(count * 7);
+				continue;
+			}
+			if (opcode == 16) {
 				buffer.skip(4);
-			} else if (opcode == 17) {
+				continue;
+			}
+			if (opcode == 17) {
 				int count = buffer.readUByte();
 				buffer.skip(count);
-			} else {
-				System.err.println("Error unrecognised seq config code: " + opcode);
+				continue;
 			}
-		} while (true);
-
+			System.err.println("Error unrecognised seq config code: " + opcode);
+		}
 		if (animation.getFrameCount() == 0) {
 			animation.setFrameCount(1);
 			int[] primaryFrames = new int[1];
@@ -148,14 +164,10 @@ public class AnimationDefinitionLoaderOSRS extends AnimationDefinitionLoader {
 			animation.setSecondaryFrames(secondaryFrames);
 			animation.setDurations(durations);
 		}
-
-		if (animation.getAnimatingPrecedence() == -1) {
-			animation.setAnimatingPrecedence(animation.getInterleaveOrder() == null ? 0 : 2);
-		}
-
-		if (animation.getWalkingPrecedence() == -1) {
-			animation.setWalkingPrecedence(animation.getInterleaveOrder() == null ? 0 : 2);
-		}
+		if (animation.getAnimatingPrecedence() == -1)
+			animation.setAnimatingPrecedence((animation.getInterleaveOrder() == null) ? 0 : 2);
+		if (animation.getWalkingPrecedence() == -1)
+			animation.setWalkingPrecedence((animation.getInterleaveOrder() == null) ? 0 : 2);
 		return animation;
 	}
 
