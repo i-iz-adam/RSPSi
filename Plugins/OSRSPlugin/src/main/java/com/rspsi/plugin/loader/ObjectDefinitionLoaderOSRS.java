@@ -230,6 +230,8 @@ public class ObjectDefinitionLoaderOSRS extends ObjectDefinitionLoader {
 				definition.setAreaId(buffer.readUShort());//AreaType
 			} else if (opcode == 89) {
 				definition.setRandomizeAnimStart(true);
+			} else if (opcode == 90) {
+				// defer anim start
 			} else if (opcode == 249) {
 				int var1 = buffer.readUByte();
 				for (int var2 = 0; var2 < var1; var2++) {
