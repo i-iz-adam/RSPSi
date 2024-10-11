@@ -7,4 +7,5 @@ public class RegionData {
 	
 	private final int hash, loc, obj;
 
+	private final String groupName;
 }

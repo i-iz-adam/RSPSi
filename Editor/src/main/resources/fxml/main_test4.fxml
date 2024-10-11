@@ -543,6 +543,7 @@
                           <items>
                               <CheckMenuItem fx:id="rememberSize" mnemonicParsing="false" text="Remember Editor Size" />
                               <CheckMenuItem fx:id="rememberLocation" mnemonicParsing="false" text="Remember Editor Location" />
+                              <CheckMenuItem fx:id="saveByGroupName" mnemonicParsing="false" text="Save as Group Name" />
                           </items>
                       </Menu>
                     <Menu fx:id="helpMenu" mnemonicParsing="false" text="Help">

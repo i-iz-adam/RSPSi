@@ -10,6 +10,7 @@ public abstract class MapIndexLoader {
 	public abstract void init(Archive archive);
 	public abstract void init(Buffer buffer);
 	public abstract int getFileId(int hash, MapType type);
+	public abstract String getGroupName(int hash, MapType type);
 	public abstract boolean landscapePresent(int id);
 	public abstract boolean objectPresent(int id);
 	public abstract void set(int regionX, int regionY, int landscapeId, int objectsId);
