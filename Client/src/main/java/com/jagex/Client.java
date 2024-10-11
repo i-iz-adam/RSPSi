@@ -623,6 +623,7 @@ public final class Client implements Runnable {
 					// Each -6 is -0.5 in loop, for a total of +1 loop
 					int landscapeMapId = MapIndexLoader.resolve(cX, cY, MapType.LANDSCAPE);
 					chunk.tileMapId = landscapeMapId;
+					chunk.tileMapGroup = MapIndexLoader.instance.getGroupName(chunk.regionHash,MapType.LANDSCAPE);
 					chunk.tileMapName = MapIndexLoader.getName(cX, cY, MapType.LANDSCAPE);
 					if (landscapeMapId != -1) {
 						getProvider().requestMap(landscapeMapId, hash);
@@ -631,12 +632,13 @@ public final class Client implements Runnable {
 
 					int objectMapId = MapIndexLoader.resolve(cX, cY, MapType.OBJECT);
 					chunk.objectMapId = objectMapId;
+					chunk.objectMapGroup = MapIndexLoader.instance.getGroupName(chunk.regionHash,MapType.OBJECT);
 					chunk.objectMapName = MapIndexLoader.getName(cX, cY, MapType.OBJECT);
 					if (objectMapId != -1) {
 						getProvider().requestMap(objectMapId, hash);
 						System.out.println("Requesting object map " + objectMapId);
 					}
-					log.info("Added chunk, obj/landscape {}/{}", objectMapId, landscapeMapId);
+					log.info("Added chunk, obj/landscape {}/{} [{},{}]", objectMapId, landscapeMapId, chunk.objectMapGroup, chunk.tileMapGroup);
 					pendingChunks.add(chunk);
 				//} catch (Exception exception) {
 				//	break;

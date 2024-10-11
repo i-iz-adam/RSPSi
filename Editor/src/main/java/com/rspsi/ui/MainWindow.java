@@ -797,11 +797,22 @@ public class MainWindow extends Application {
 			for(Chunk chunk : clientInstance.chunks) {
 				clientInstance.xCameraPos = (chunk.offsetX + 32) * 128;
 				clientInstance.yCameraPos = (chunk.offsetY + 32) * 128;
-				File landscapeFile = RetentionFileChooser.showSaveDialog("Enter a name for tiles...", stage, chunk.tileMapId + "",
+
+				String saveNameTiles = String.valueOf(chunk.tileMapId);
+				String saveNameObjects = String.valueOf(chunk.objectMapId);
+
+				boolean saveGroupName = (Boolean) Settings.properties.getOrDefault("save_group_name",false);
+
+				if (saveGroupName && !chunk.objectMapGroup.isEmpty() && !chunk.tileMapGroup.isEmpty()) {
+					saveNameTiles = chunk.objectMapGroup;
+					saveNameObjects = chunk.tileMapGroup;
+				}
+
+				File landscapeFile = RetentionFileChooser.showSaveDialog("Enter a name for tiles...", stage, saveNameTiles,
 						FilterMode.DAT, FilterMode.GZIP);
 				if (landscapeFile == null)
 					return;
-				File objectFile = RetentionFileChooser.showSaveDialog("Enter a name for objects...", stage, chunk.objectMapId + "",
+				File objectFile = RetentionFileChooser.showSaveDialog("Enter a name for objects...", stage, saveNameObjects,
 						FilterMode.DAT, FilterMode.GZIP);
 
 				if (objectFile == null)
