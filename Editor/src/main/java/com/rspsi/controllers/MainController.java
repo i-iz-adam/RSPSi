@@ -359,6 +359,9 @@ public class MainController {
 	private MenuItem showRemapperBtn;
 
 	@FXML
+	private MenuItem convertLandscapeBtn;
+
+	@FXML
 	private MenuItem setRelativeHeight;
 	
 	@FXML
