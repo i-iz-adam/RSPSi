@@ -138,6 +138,9 @@ public class MainController {
 	private CheckMenuItem rememberLocation;
 
 	@FXML
+	private CheckMenuItem saveByGroupName;
+
+	@FXML
 	private CheckMenuItem showOverlaysCheckItem;
 
 	@FXML
@@ -356,6 +359,9 @@ public class MainController {
 	private MenuItem showRemapperBtn;
 
 	@FXML
+	private MenuItem convertLandscapeBtn;
+
+	@FXML
 	private MenuItem setRelativeHeight;
 	
 	@FXML
@@ -537,9 +543,10 @@ public class MainController {
 
 		boolean remeberSize = (Boolean) Settings.properties.getOrDefault("remember_size",true);
 		boolean remeberLocation = (Boolean) Settings.properties.getOrDefault("remember_location",false);
+		boolean saveGroupName = (Boolean) Settings.properties.getOrDefault("save_group_name",false);
 
 		ChangeListenerUtil.addListener(() -> {
-			if(remeberSize == true) {
+			if(remeberSize) {
 				Settings.properties.put("remember_size", false);
 			} else {
 				Settings.properties.put("remember_size", true);
@@ -549,7 +556,7 @@ public class MainController {
 		}, Options.rememberEditorSize);
 
 		ChangeListenerUtil.addListener(() -> {
-			if(remeberLocation == true) {
+			if(remeberLocation) {
 				Settings.properties.put("remember_location", false);
 			} else {
 				Settings.properties.put("remember_location", true);
@@ -558,12 +565,24 @@ public class MainController {
 			Settings.saveSettings();
 		}, Options.rememberEditorLocation);
 
+
+		ChangeListenerUtil.addListener(() -> {
+			if(saveGroupName) {
+				Settings.properties.put("save_group_name", false);
+			} else {
+				Settings.properties.put("save_group_name", true);
+			}
+			saveByGroupName.setSelected(saveGroupName);
+			Settings.saveSettings();
+		}, Options.saveByGroupName);
+
 		rememberSize.setSelected(remeberSize);
 		rememberLocation.setSelected(remeberLocation);
+		saveByGroupName.setSelected(saveGroupName);
 
 		Options.rememberEditorSize.bindBidirectional(this.rememberSize.selectedProperty());
 		Options.rememberEditorLocation.bindBidirectional(this.rememberLocation.selectedProperty());
-
+		Options.saveByGroupName.bindBidirectional(this.saveByGroupName.selectedProperty());
 
 		decreaseBrushSizeBtn.setOnAction(act -> brushSizeSlider.adjustValue(brushSizeSlider.getValue() - 1));
 		increaseBrushSizeBtn.setOnAction(act -> brushSizeSlider.adjustValue(brushSizeSlider.getValue() + 1));
