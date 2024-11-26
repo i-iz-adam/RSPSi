@@ -4,7 +4,9 @@ import com.jagex.cache.def.RSArea;
 import com.displee.cache.index.archive.Archive;
 import com.displee.cache.index.archive.file.File;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.Maps;
@@ -55,8 +57,10 @@ public class ObjectDefinitionLoaderOSRS extends ObjectDefinitionLoader {
 		definition.setId(id);
 		int interactive = -1;
 		int lastOpcode = -1;
+		List<Integer> opcodes = new ArrayList<>();
 		do {
 			int opcode = buffer.readUByte();
+			opcodes.add(opcode);
 			if (opcode == 0) {
 				break;
 			}
@@ -231,7 +235,7 @@ public class ObjectDefinitionLoaderOSRS extends ObjectDefinitionLoader {
 			} else if (opcode == 89) {
 				definition.setRandomizeAnimStart(true);
 			} else if (opcode == 90) {
-				// defer anim start
+				buffer.skip(1);
 			} else if (opcode == 249) {
 				int var1 = buffer.readUByte();
 				for (int var2 = 0; var2 < var1; var2++) {
@@ -244,8 +248,8 @@ public class ObjectDefinitionLoaderOSRS extends ObjectDefinitionLoader {
 					}
 				}
 			} else {
-				System.out.println("ObjId: " + id + ", Unrecognised object opcode " + opcode + " last;" + lastOpcode + "ID: " + id);
-				continue;
+				System.out.println("ObjId: " + id + ", Unrecognised object opcode " + opcode + " last;" + lastOpcode + "ID: " + id + " - opcodes order [" + opcodes + "]");
+				break;
 			}
 			lastOpcode = opcode;
 		} while (true);
