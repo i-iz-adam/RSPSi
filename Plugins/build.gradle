@@ -33,7 +33,7 @@ subprojects {
 
     task copyJarToBin(type: Copy) {
         from jar.outputs
-        into new File(project(':Editor').projectDir, "/plugins/inactive")
+        into new File(project(':Editor').projectDir, "/plugins/active")
     }
 
 
