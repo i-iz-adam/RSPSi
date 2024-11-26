@@ -47,7 +47,7 @@ public class LauncherWindow extends Application {
 		java.nio.file.Files.createDirectories(Paths.get(System.getProperty("user.home"), ".rspsi"));
 		File logFile = new File(Paths.get(System.getProperty("user.home"), ".rspsi").toFile(), "log.txt");
 
-			System.setOut(new PrintStream(logFile));
+			//System.setOut(new PrintStream(logFile));
 
 		singleton = this;
 		this.primaryStage = primaryStage;
